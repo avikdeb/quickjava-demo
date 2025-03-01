@@ -58,9 +58,28 @@ public class MySQLDemo2 {
         statement.close();
     }
 
-    // CRUD - Simple INSERT (Create) with Prepared Statement (recommended)
+    // CRUD 1 - Simple INSERT (Create) with Prepared Statement (recommended)
+    public static void insertEmp(Connection conn) throws SQLException {
+        String insertSQL = "INSERT INTO quickjava.emp (firstname, lastname, nickname) VALUES (?, ?, ?)";
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        try {
+            pstmt = conn.prepareStatement(insertSQL);
 
-    // CRUD - Simple SELECT (Read) with Prepared Statement (recommended)
+            // Set parameters
+            pstmt.setString(1, "purva");
+            pstmt.setString(2, "vats");
+            pstmt.setString(3, "purva");
+
+            int rowAffected = pstmt.executeUpdate();
+            System.out.println("[INFO] [Prepared Statement call] Row affected : "+rowAffected);
+
+        } catch(SQLException e){
+            e.printStackTrace();
+        }
+        pstmt.close();
+    }
+    // CRUD 2 - Simple SELECT (Read) with Prepared Statement (recommended)
     public static void getNicknameByFirstnameLastname(Connection conn) throws SQLException {
         String selectSQL = "SELECT * FROM quickjava.emp WHERE firstname = ? AND lastname = ?";
         PreparedStatement pstmt = null;
@@ -82,7 +101,7 @@ public class MySQLDemo2 {
         pstmt.close();
     }
 
-    // CRUD - Simple UPDATE with Prepared statement (recommended)
+    // CRUD 3 - Simple UPDATE with Prepared statement (recommended)
     public static void updateNicknameById(Connection conn) throws SQLException {
         String updateSQL = "UPDATE quickjava.emp SET nickname= ? WHERE idemp = ?";
         PreparedStatement pstmt = null;
@@ -91,7 +110,7 @@ public class MySQLDemo2 {
             pstmt = conn.prepareStatement(updateSQL);
 
             // Set parameters
-            pstmt.setString(1, "dada");
+            pstmt.setString(1, "pigoo");
             pstmt.setInt(2, 1);
             pstmt.executeUpdate();
         } catch(SQLException e){
@@ -100,12 +119,13 @@ public class MySQLDemo2 {
         pstmt.close();
     }
 
-    // CRUD - Simple DELETE with Prepared Statement (recommended)
+    // CRUD 4 - Simple DELETE with Prepared Statement (recommended)
 
     // Driver code to test DB operations.
     public static void main(String[] args) {
         try {
             Connection connection = getMySQLDBConnection();
+            insertEmp(connection);
             getEmpDetails(connection);
             getNicknameByFirstnameLastname(connection);
             updateNicknameById(connection);

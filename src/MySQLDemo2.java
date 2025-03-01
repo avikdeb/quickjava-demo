@@ -1,7 +1,6 @@
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
+import java.util.HashMap;
+import java.util.Map;
 
 // Database connection and CRUD operations.
 public class MySQLDemo2 {
@@ -27,21 +26,68 @@ public class MySQLDemo2 {
         return connection;
     }
 
+    public static void closeMySQLConnection(Connection conn) {
+        try {
+            if (conn!=null) {
+                conn.close();
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    // Simple SELECT with Statement (not recommended)
+    public static void getEmpDetails(Connection conn) throws SQLException {
+        Statement statement = null;
+        ResultSet resultSet = null;
+        try {
+            statement = conn.createStatement();
+            // READ operation (SELECT)
+            resultSet = statement.executeQuery("SELECT * FROM quickjava.emp;");
+            while (resultSet.next()) {
+                System.out.println("[INFO] [Statement call] Id : " + resultSet.getInt("idemp"));
+                System.out.println("[INFO] [Statement call] Firstname : " + resultSet.getString("firstname"));
+                System.out.println("[INFO] [Statement call] Lastname : " + resultSet.getString("lastname"));
+                System.out.println("[INFO] [Statement call] Nickname : " + resultSet.getString("nickname"));
+                System.out.println("-----------------------------");
+            }
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+        resultSet.close();
+        statement.close();
+    }
+
+    // Simple SELECT with Prepared Statement (recommended)
+    public static void getNicknameByFirstnameLastname(Connection conn) throws SQLException {
+        String query = "SELECT * FROM quickjava.emp WHERE firstname = ? AND lastname = ?";
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        try {
+            pstmt = conn.prepareStatement(query);
+
+            // Set parameters
+            pstmt.setString(1, "avik");
+            pstmt.setString(2, "deb");
+            rs = pstmt.executeQuery();
+            while (rs.next()) {
+                System.out.println("[INFO] [Prepared Statement call] Registered nickname : "+rs.getString("nickname"));
+            }
+        } catch(SQLException e){
+            e.printStackTrace();
+        }
+        rs.close();
+        pstmt.close();
+    }
+
+    // Driver code to test DB operations.
     public static void main(String[] args) {
         try {
             Connection connection = getMySQLDBConnection();
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM quickjava.emp;");
-            while (resultSet.next()) {
-                System.out.println("Id : "+resultSet.getInt("idemp"));
-                System.out.println("Firstname : "+resultSet.getString("firstname"));
-                System.out.println("Lastname : "+resultSet.getString("lastname"));
-                System.out.println("Nickname : "+resultSet.getString("nickname"));
-            }
-            resultSet.close();
-            statement.close();
-            connection.close();
+            getEmpDetails(connection);
+            getNicknameByFirstnameLastname(connection);
 
+            closeMySQLConnection(connection);
         } catch(Exception e) {
             e.printStackTrace();
         }

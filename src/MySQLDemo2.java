@@ -58,13 +58,15 @@ public class MySQLDemo2 {
         statement.close();
     }
 
-    // Simple SELECT with Prepared Statement (recommended)
+    // CRUD - Simple INSERT (Create) with Prepared Statement (recommended)
+
+    // CRUD - Simple SELECT (Read) with Prepared Statement (recommended)
     public static void getNicknameByFirstnameLastname(Connection conn) throws SQLException {
-        String query = "SELECT * FROM quickjava.emp WHERE firstname = ? AND lastname = ?";
+        String selectSQL = "SELECT * FROM quickjava.emp WHERE firstname = ? AND lastname = ?";
         PreparedStatement pstmt = null;
         ResultSet rs = null;
         try {
-            pstmt = conn.prepareStatement(query);
+            pstmt = conn.prepareStatement(selectSQL);
 
             // Set parameters
             pstmt.setString(1, "avik");
@@ -80,11 +82,33 @@ public class MySQLDemo2 {
         pstmt.close();
     }
 
+    // CRUD - Simple UPDATE with Prepared statement (recommended)
+    public static void updateNicknameById(Connection conn) throws SQLException {
+        String updateSQL = "UPDATE quickjava.emp SET nickname= ? WHERE idemp = ?";
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        try {
+            pstmt = conn.prepareStatement(updateSQL);
+
+            // Set parameters
+            pstmt.setString(1, "dada");
+            pstmt.setInt(2, 1);
+            pstmt.executeUpdate();
+        } catch(SQLException e){
+            e.printStackTrace();
+        }
+        pstmt.close();
+    }
+
+    // CRUD - Simple DELETE with Prepared Statement (recommended)
+
     // Driver code to test DB operations.
     public static void main(String[] args) {
         try {
             Connection connection = getMySQLDBConnection();
             getEmpDetails(connection);
+            getNicknameByFirstnameLastname(connection);
+            updateNicknameById(connection);
             getNicknameByFirstnameLastname(connection);
 
             closeMySQLConnection(connection);

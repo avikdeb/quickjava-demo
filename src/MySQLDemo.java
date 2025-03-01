@@ -1,11 +1,10 @@
 import java.sql.*;
 
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
+// Database connection and a simple query statement execution.
 public class MySQLDemo {
     public static void main(String[] args) {
         Connection connection = null;
-        String url = "jdbc:mysql://localhost:3306/perldemo";
+        String url = "jdbc:mysql://localhost:3306/quickjava";
         String user = "root";
         String password = "root";
 

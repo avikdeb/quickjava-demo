@@ -119,8 +119,6 @@ public class MySQLDemo2 {
         pstmt.close();
     }
 
-    // CRUD 4 - Simple DELETE with Prepared Statement (recommended)
-
     // Driver code to test DB operations.
     public static void main(String[] args) {
         try {

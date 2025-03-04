@@ -62,7 +62,6 @@ public class MySQLDemo2 {
     public static void insertEmp(Connection conn) throws SQLException {
         String insertSQL = "INSERT INTO quickjava.emp (firstname, lastname, nickname) VALUES (?, ?, ?)";
         PreparedStatement pstmt = null;
-        ResultSet rs = null;
         try {
             pstmt = conn.prepareStatement(insertSQL);
 
@@ -105,12 +104,11 @@ public class MySQLDemo2 {
     public static void updateNicknameById(Connection conn) throws SQLException {
         String updateSQL = "UPDATE quickjava.emp SET nickname= ? WHERE idemp = ?";
         PreparedStatement pstmt = null;
-        ResultSet rs = null;
         try {
             pstmt = conn.prepareStatement(updateSQL);
 
             // Set parameters
-            pstmt.setString(1, "pigoo");
+            pstmt.setString(1, "dada");
             pstmt.setInt(2, 1);
             pstmt.executeUpdate();
         } catch(SQLException e){
